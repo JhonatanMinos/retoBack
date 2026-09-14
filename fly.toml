@@ -1,0 +1,25 @@
+app = "reto-geest"
+primary_region = "iad"
+
+[build]
+
+[env]
+  PORT = "3000"
+  DB_FILE = "/data/data.sqlite"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
+
+[[mounts]]
+  source = "data"
+  destination = "/data"
