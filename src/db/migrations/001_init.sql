@@ -11,7 +11,7 @@ CREATE TABLE tasks (
     title TEXT NOT NULL,
     description TEXT,
     status TEXT NOT NULL DEFAULT 'open',
-    created_at TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
     archived_at TEXT,
     cancelled_at TEXT
 );
