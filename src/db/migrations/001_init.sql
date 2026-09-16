@@ -7,12 +7,13 @@ CREATE TABLE users (
 );
 
 CREATE TABLE tasks (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  title TEXT NOT NULL,
-  description TEXT,
-  status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open','archived')),
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  archived_at TEXT
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT,
+    status TEXT NOT NULL DEFAULT 'open',
+    created_at TEXT NOT NULL,
+    archived_at TEXT,
+    cancelled_at TEXT
 );
 
 CREATE TABLE task_assignments (
