@@ -29,3 +29,8 @@ export function runMigrations(db: Database.Database) {
     insert.run(file);
   }
 }
+
+const dbPath = process.env.DATABASE_PATH || path.join(__dirname, "..", "database.sqlite");
+
+// Exportamos la instancia ya creada con el nombre DB
+export const DB = createDb(dbPath);
