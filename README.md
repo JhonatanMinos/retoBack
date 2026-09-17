@@ -1,29 +1,5 @@
 # Reto Geest — API REST de gestión de tareas
 
-API REST en **Node.js + TypeScript + Express + SQLite (better-sqlite3)** que implementa los endpoints del reto con idempotencia, archivado atómico y notificaciones con reintentos.
-
-## Stack y decisiones técnicas
-
-- **Node.js 20+ / TypeScript** — tipado estático y buena ergonomía.
-- **Express** — simple, estable, ecosistema maduro para tests con `supertest`.
-- **SQLite + better-sqlite3** — base de datos SQL real, con transacciones ACID y API **síncrona**, lo que facilita razonar sobre concurrencia en un solo proceso. Fácil de desplegar como archivo persistente.
-- **Zod** — validación declarativa de bodies con mensajes útiles.
-- **Vitest + supertest** — tests unitarios/integración rápidos.
-- **Migraciones versionadas** — `db/migrations/*.sql` aplicadas idempotentemente al arranque.
-
-### Cómo se resuelven los requisitos de confiabilidad
-
-1. **Idempotencia (POST)** — Middleware `idempotencyMiddleware` que:
-   - Lee `Idempotency-Key`. Si no está, ejecuta normal.
-   - Calcula hash del body. Si la misma key llega con otro body → `409 IDEMPOTENCY_CONFLICT`.
-   - Guarda la respuesta completa en `idempotency_keys`. Replays devuelven la respuesta cacheada.
-   - **Paralelismo**: se usa un `Map` de promesas en memoria + `INSERT` atómico en la tabla. Dos requests concurrentes con la misma key esperan la misma promesa y obtienen el mismo resultado. La fila persiste por si el proceso se reinicia.
-2. **Archivado sin duplicados** — Al completar la parte de un usuario se ejecuta `db.transaction(...)` que:
-   - Cuenta asignaciones pendientes.
-   - Solo hace `UPDATE tasks SET status='archived' ... WHERE id=? AND status='open'`.
-   - Si `changes === 1`, ESE request ganó la carrera y dispara la notificación. El otro request obtiene `changes === 0`. Garantiza archivar **y notificar exactamente una vez**, incluso con clics simultáneos.
-3. **Notificaciones con reintentos** — `dispatchNotification` hace `POST` a `NOTIFY_URL` con backoff exponencial (0s, 1s, 2s), máx. 3 intentos. Registra cada intento (`attempt`, `status_code`, `error`, `created_at`) en la tabla `notifications`, consultable vía `GET /tasks/:idTask/notifications`. Se reintenta ante 5xx/errores de red; no ante 4xx.
-
 ## Ejecutar localmente
 
 Requisitos: Node.js ≥ 20 y `pnpm` ≥ 9.

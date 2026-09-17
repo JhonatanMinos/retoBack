@@ -1,10 +1,10 @@
 import express, { Application } from "express";
-import { DB } from "./db";
+import { DBType } from "./db";
 import { createUsersRouter } from "./routes/users";
 import { createTasksRouter } from "./routes/tasks";
 import { errorHandler } from "./middleware/errorHandler";
 
-export function createApp(db: DB): Application {
+export function createApp(db: DBType): Application {
   const app = express();
 
   app.use(express.json({ limit: "1mb" }));
