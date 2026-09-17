@@ -1,6 +1,6 @@
 import { Request, RequestHandler } from "express";
 import crypto from "crypto";
-import { DB } from "../db";
+import { DBType } from "../db";
 import { ApiError } from "../errors";
 
 export type HandlerResult = { status: number; body: unknown };
@@ -18,7 +18,7 @@ function hashBody(body: unknown): string {
 }
 
 export function idempotencyMiddleware(
-  db: DB,
+  db: DBType,
   handler: Handler,
 ): RequestHandler {
   return async (req, res, next) => {

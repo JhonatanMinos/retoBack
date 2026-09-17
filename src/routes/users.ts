@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { DB } from "../db";
+import { DBType } from "../db";
 import { ApiError } from "../errors";
 import { idempotencyMiddleware } from "../middleware/idempotency";
 
@@ -10,7 +10,7 @@ const createUserSchema = z.object({
   email: z.string().trim().email("email must be a valid email"),
 });
 
-export function createUsersRouter(db: DB): Router {
+export function createUsersRouter(db: DBType): Router {
   const router = Router();
 
   // POST /users

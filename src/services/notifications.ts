@@ -1,4 +1,4 @@
-import { DB } from "../db";
+import { DBType } from "../db";
 
 const MAX_ATTEMPTS = 3;
 
@@ -11,7 +11,7 @@ function sleep(ms: number): Promise<void> {
  * Every attempt is logged in `notifications` regardless of outcome.
  */
 export async function dispatchNotification(
-  db: DB,
+  db: DBType,
   taskId: number,
   title: string,
   archivedAt: string,

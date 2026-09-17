@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { DB } from "../db";
+import { DBType } from "../db";
 import { ApiError } from "../errors";
 import { idempotencyMiddleware } from "../middleware/idempotency";
 import { dispatchNotification } from "../services/notifications";
@@ -22,7 +22,7 @@ const completeSchema = z.object({
 
 const statusSchema = z.enum(["open", "archived"]);
 
-export function createTasksRouter(db: DB): Router {
+export function createTasksRouter(db: DBType): Router {
   const router = Router();
 
   // ---------------------------------------------------------------
