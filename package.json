@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc && copyfiles -u 3 \"src/db/migrations/**/*.sql\" dist",
+    "build": "tsc && copyfiles -u 1 \"src/db/migrations/**/*.sql\" dist",
     "start": "node dist/index.js",
     "migrate": "tsx src/db/migrate.ts",
     "test": "vitest run",
